@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🇯🇵 일본어 인터뷰 스크립트</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+JP:wght@400;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --red: #e53935; --dark-red: #b71c1c; --light-red: #ffebee;
+    --dark: #111; --mid: #555; --light: #888;
+    --bg: #f5f5f5; --white: #fff; --border: #e0e0e0; --green-bg: #e8f5e9;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    font-family: 'Noto Sans KR', 'Noto Sans JP', sans-serif;
+    color: var(--dark); min-height: 100vh;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+  .sticky-header {
+    position: sticky; top: 0; z-index: 100;
+    background: linear-gradient(135deg, var(--red), var(--dark-red));
+    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .sticky-header h1 { font-size: 14px; font-weight: 700; color: #fff; }
+  .interview-count {
+    background: rgba(255,255,255,0.2); color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+  }
+  .quick-nav {
+    display: flex; overflow-x: auto; gap: 6px;
+    padding: 10px 16px; background: var(--white);
+    border-bottom: 1px solid var(--border); scrollbar-width: none;
+  }
+  .quick-nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex-shrink: 0; background: var(--light-red); color: var(--red);
+    border: none; border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    padding: 6px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .nav-btn.active { background: var(--red); color: #fff; }
+  .content { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .greeting-card {
+    background: linear-gradient(135deg, var(--red), var(--dark-red));
+    color: #fff; padding: 20px; border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(229,57,53,0.3);
+  }
+  .greeting-card .main-text { font-size: 17px; font-weight: 700; line-height: 1.7; margin-bottom: 10px; }
+  .greeting-card .pronunciation { font-size: 12px; color: rgba(255,255,255,0.75); font-style: italic; line-height: 1.7; margin-bottom: 8px; }
+  .greeting-card .kr-text { font-size: 12px; opacity: 0.85; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; }
+  .alt-card { background: var(--green-bg); border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .alt-card .label { font-weight: 700; color: #2e7d32; margin-bottom: 4px; font-size: 13px; }
+  .alt-card .main-text { font-size: 15px; font-weight: 400; color: #333; margin-bottom: 4px; }
+  .alt-card .pronunciation { font-size: 12px; color: #666; font-style: italic; margin-bottom: 6px; }
+  .alt-card .kr-text { font-size: 12px; color: #888; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--light); margin: 4px 0 2px; }
+  .q-card { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid var(--red); }
+  .q-card-header { padding: 14px 14px 10px; display: flex; align-items: flex-start; gap: 10px; }
+  .q-num { background: var(--red); color: #fff; font-weight: 700; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .q-meta { flex: 1; }
+  .q-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .badge-cat { background: var(--light-red); color: var(--red); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+  .badge-pri { background: var(--red); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+  .q-body { padding: 0 14px 14px; }
+  .q-main { font-size: 17px; font-weight: 700; color: #222; line-height: 1.6; margin-bottom: 6px; }
+  .q-pronunciation { font-size: 12px; color: var(--red); font-style: italic; line-height: 1.6; margin-bottom: 6px; background: #fff5f5; padding: 6px 10px; border-radius: 6px; border-left: 3px solid var(--red); }
+  .q-kr { font-size: 12px; color: var(--light); margin-bottom: 10px; }
+  .hint-box { background: #fafafa; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .hint-label { font-size: 10px; font-weight: 700; color: var(--red); margin-bottom: 4px; letter-spacing: 0.05em; }
+  .note-box { background: #fff3e0; border-left: 3px solid #ff9800; border-radius: 0 8px 8px 0; padding: 8px 12px; font-size: 12px; color: var(--mid); line-height: 1.6; margin-bottom: 8px; }
+  .answer-textarea {
+    width: 100%; border: 2px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; min-height: 60px; font-size: 14px;
+    font-family: inherit; color: var(--dark); background: #fafafa;
+    resize: none; line-height: 1.6; -webkit-appearance: none; outline: none;
+  }
+  .answer-textarea:focus { border-color: var(--red); background: #fff; }
+  .answer-textarea.tall { min-height: 90px; }
+  .closing-card { background: linear-gradient(135deg, #f06292, #c2185b); color: #fff; padding: 20px; border-radius: 14px; box-shadow: 0 4px 16px rgba(240,98,146,0.3); margin-bottom: 10px; }
+  .closing-card .main-text { font-size: 17px; font-weight: 700; line-height: 1.7; margin-bottom: 8px; }
+  .closing-card .pronunciation { font-size: 12px; color: rgba(255,255,255,0.75); font-style: italic; line-height: 1.7; margin-bottom: 8px; }
+  .closing-card .kr-text { font-size: 12px; opacity: 0.85; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; line-height: 1.6; }
+  .gift-card { background: #fce4ec; border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .gift-card .main-text { font-size: 14px; font-weight: 700; color: #c2185b; margin-bottom: 4px; }
+  .gift-card .pronunciation { font-size: 12px; color: #888; font-style: italic; margin-bottom: 4px; }
+  .gift-card .kr-text { font-size: 12px; color: #888; }
+  .tips-card { background: #fff9e6; border: 2px solid #ffd600; border-radius: 14px; padding: 16px; }
+  .tips-card h3 { color: #f57f17; font-size: 15px; margin-bottom: 12px; font-weight: 700; }
+  .tip-item { padding: 10px 0; border-bottom: 1px solid #fff0ab; font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .tip-item:last-child { border-bottom: none; }
+  .tip-item strong { color: #333; }
+  .mini-badge { display: inline-block; background: #ffd600; color: #333; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .footer { text-align: center; padding: 24px 16px; font-size: 11px; color: var(--light); line-height: 1.7; }
+
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--white); border-top: 1px solid var(--border);
+    padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 10px; z-index: 200;
+  }
+  .btn-save { flex: 1; background: var(--dark); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 14px; padding: 14px; cursor: pointer; transition: opacity 0.15s; }
+  .btn-save:active { opacity: 0.8; }
+  .btn-new { flex: 1; background: var(--red); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 14px; padding: 14px; cursor: pointer; transition: opacity 0.15s; }
+  .btn-new:active { opacity: 0.8; }
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--dark); color: #fff; font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 20px; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; z-index: 300; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <h1>🇯🇵 日本人観光客 인터뷰 스크립트</h1>
+  <span class="interview-count" id="interview-count">인터뷰 #1</span>
+</div>
+
+<div class="quick-nav">
+  <button class="nav-btn active" onclick="scrollTo(0,0)">🎬 인사</button>
+  <button class="nav-btn" onclick="document.getElementById('q1').scrollIntoView({behavior:'smooth'})">Q1</button>
+  <button class="nav-btn" onclick="document.getElementById('q2').scrollIntoView({behavior:'smooth'})">Q2 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q3').scrollIntoView({behavior:'smooth'})">Q3 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q4').scrollIntoView({behavior:'smooth'})">Q4 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q5').scrollIntoView({behavior:'smooth'})">Q5</button>
+  <button class="nav-btn" onclick="document.getElementById('q6').scrollIntoView({behavior:'smooth'})">Q6</button>
+  <button class="nav-btn" onclick="document.getElementById('q7').scrollIntoView({behavior:'smooth'})">Q7</button>
+  <button class="nav-btn" onclick="document.getElementById('q8').scrollIntoView({behavior:'smooth'})">Q8</button>
+  <button class="nav-btn" onclick="document.getElementById('q9').scrollIntoView({behavior:'smooth'})">Q9 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('closing').scrollIntoView({behavior:'smooth'})">🎬 마무리</button>
+</div>
+
+<div class="content">
+
+  <div class="section-label">🎬 開場 | 시작 인사</div>
+  <div class="greeting-card">
+    <div class="main-text">こんにちは！外国人観光客の韓国旅行体験についてアンケートをしています。<br>3分ほど、いくつか簡単な質問をしてもよいですか？</div>
+    <div class="pronunciation">콘니치와! 가이코쿠진 칸코캬쿠노 칸코쿠 료코 타이켄니 츠이테 앙케-토오 시테 이마스.<br>산분 호도, 이쿠츠카 칸탄나 시츠몬오 시테모 요이데스카?</div>
+    <div class="kr-text">안녕하세요! 외국인 관광객의 한국 여행 경험 조사 중입니다.<br>3분만 간단한 질문 몇 가지 여쭤봐도 될까요?</div>
+  </div>
+  <div class="alt-card">
+    <div class="label">💬 부드러운 버전</div>
+    <div class="main-text">すみません、少しよろしいですか？アンケートなんですが、3分だけでいいんですが…</div>
+    <div class="pronunciation">스미마셍, 스코시 요로시이데스카? 앙케-토 난데스가, 산분다케데 이인데스가…</div>
+    <div class="kr-text">(죄송합니다, 잠깐 괜찮으세요? 설문인데요, 3분만 되는데요...)</div>
+  </div>
+
+  <div class="section-label" style="margin-top:8px;">❓ 質問 | 핵심 질문 (9개)</div>
+
+  <div class="q-card" id="q1">
+    <div class="q-card-header"><div class="q-num">1</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">基本情報</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">韓国は今回で何回目のご旅行ですか？</div>
+      <div class="q-pronunciation">칸코쿠와 콘카이데 난카이메노 고료코데스카?</div>
+      <div class="q-kr">한국 방문이 몇 번째예요?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>初めてです (하지메테데스) / 2回目です (니카이메데스) / もう何回も来てます (모- 난카이모 키테마스)</div>
+      <div class="note-box">※ 재방문자는 Papago 사용 경험이 있을 가능성이 높음</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="1"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q2">
+    <div class="q-card-header"><div class="q-num">2</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">翻訳/번역</span><span class="badge-pri">最重要 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">旅行中、翻訳アプリは使いますか？どのアプリですか？</div>
+      <div class="q-pronunciation">료코츄-, 혼야쿠 아푸리와 츠카이마스카? 도노 아푸리데스카?</div>
+      <div class="q-kr">여행 중 번역 앱 써요? 어떤 거?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>Papago使ってます (파파고 츠캇테마스) / Google翻訳 (구-구루 혼야쿠) / DeepL / あまり使わない (아마리 츠카와나이)</div>
+      <div class="note-box">※ 일본인 관광객 중 Papago 인지도 높음. 한국어 공부 중이면 번역 앱 안 쓰기도 함</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="2"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q3">
+    <div class="q-card-header"><div class="q-num">3</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">翻訳/번역</span><span class="badge-pri">最重要 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">Papagoを使ったことはありますか？使い心地はどうでしたか？</div>
+      <div class="q-pronunciation">파파고오 츠캇타 코토와 아리마스카? 츠카이고코치와 도-데시타카?</div>
+      <div class="q-kr">Papago 써보셨어요? 어떠셨어요?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>使ってます、便利です！(츠캇테마스, 벤리데스!) / Google翻訳の方が慣れてる (구-구루 혼야쿠노 호-가 나레테루)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="3"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q4">
+    <div class="q-card-header"><div class="q-num">4</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">翻訳/번역</span><span class="badge-pri">最重要 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">翻訳アプリが一番役に立つのはどんな場面ですか？</div>
+      <div class="q-pronunciation">혼야쿠 아푸리가 이치방 야쿠니 타츠노와 돈나 바멘데스카?</div>
+      <div class="q-kr">번역 앱 어떤 상황에서 가장 필요해요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>たとえば、食事の注文？買い物？道を調べる時？<br><span style="font-size:12px;color:#888;">(타토에바, 쇼쿠지노 츄-몬? 카이모노? 미치오 시라베루 토키?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>食事の注文の時 (쇼쿠지노 츄-몬노 토키) / メニューが読めない (메뉴-가 요메나이) / 店員さんと話す時 (텐인상토 하나스 토키)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="4"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q5">
+    <div class="q-card-header"><div class="q-num">5</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">地図/내비게이션</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">地図アプリを使っていて困ったことはありましたか？</div>
+      <div class="q-pronunciation">치즈 아푸리오 츠캇테이테 코맛타 코토와 아리마시타카?</div>
+      <div class="q-kr">지도 앱 쓸 때 어려움 있었어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>Naverマップ？Google Maps？どっちを使いましたか？<br><span style="font-size:12px;color:#888;">(네이버 맙푸? 구-구루 맙푸? 돗치오 츠카이마시타카?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>Google Mapsでなんとかなった (구-구루 맙푸데 난토카 낫타) / 地下鉄が分かりにくかった (치카테츠가 와카리니쿠캇타)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="5"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q6">
+    <div class="q-card-header"><div class="q-num">6</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">支払/결제</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">お買い物の際、主にどうやってお支払いしますか？現金？カード？PayPay？</div>
+      <div class="q-pronunciation">오카이모노노 사이, 오모니 도-얏테 오시하라이 시마스카? 겐킨? 카-도? 페이페이?</div>
+      <div class="q-kr">쇼핑 시 주로 어떻게 결제해요? 현금? 카드? 페이페이?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>クレジットカード (쿠렛짓토 카-도) / 現金 (겐킨) / PayPay使えなかった (페이페이 츠카에나캇타) / T-money</div>
+      <div class="note-box">※ PayPay는 일부 매장에서 사용 가능. 인식 못해 현금 지참하는 경우 많음</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="6"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q7">
+    <div class="q-card-header"><div class="q-num">7</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">支払/결제</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">免税・払い戻しの手続きはスムーズでしたか？</div>
+      <div class="q-pronunciation">멘제이・하라이모도시노 테츠즈키와 스무-즈데시타카?</div>
+      <div class="q-kr">면세(소비세) 환급 과정 순조로웠어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>何か困ったことはありましたか？<br><span style="font-size:12px;color:#888;">(나니카 코맛타 코토와 아리마시타카?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>キオスクの操作が分かりにくかった (키오스쿠노 소-사가 와카리니쿠캇타) / どこで手続きするか分からなかった</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="7"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q8">
+    <div class="q-card-header"><div class="q-num">8</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">情報源/정보 출처</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">韓国旅行の情報はどこで調べましたか？</div>
+      <div class="q-pronunciation">칸코쿠 료코노 죠-호-와 도코데 시라베마시타카?</div>
+      <div class="q-kr">한국 여행 정보 어디서 찾으셨어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>X（Twitter）？Instagram？YouTube？それとも旅行サイト？<br><span style="font-size:12px;color:#888;">(엑스? 인스타구라무? 유-츄-브? 소레토모 료코 사이토?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>X（Twitter）でよく調べた (엑스데 요쿠 시라베타) / Instagramで見た (인스타구라무데 미타) / 友達に聞いた (토모다치니 키이타)</div>
+      <div class="note-box">※ 일본인은 X(Twitter) 사용률이 높음. 한국 여행 정보도 X에서 찾는 경우 많음</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="8"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q9">
+    <div class="q-card-header"><div class="q-num">9</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">自由回答/개방형</span><span class="badge-pri">最重要 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">韓国旅行で一番不便に感じたことは何ですか？</div>
+      <div class="q-pronunciation">칸코쿠 료코데 이치방 후벤니 칸지타 코토와 난데스카?</div>
+      <div class="q-kr">한국 여행 중 가장 불편했던 거?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>言葉が通じなかった (코토바가 츠-지나캇타) / 日本語メニューがなかった (니혼고 메뉴-가 나캇타) / PayPayが使えなかった (페이페이가 츠카에나캇타)</div>
+      <textarea class="answer-textarea tall" placeholder="[ 메모 — 상세히 기록 ]" data-q="9"></textarea>
+    </div>
+  </div>
+
+  <div class="section-label" id="closing" style="margin-top:8px;">🎬 締め | 마무리 인사</div>
+  <div class="closing-card">
+    <div class="main-text">ご協力ありがとうございました！<br>韓国旅行、楽しんでいってください！</div>
+    <div class="pronunciation">고쿄-료쿠 아리가토- 고자이마시타!<br>칸코쿠 료코, 타노신데 잇테 쿠다사이!</div>
+    <div class="kr-text">참여해주셔서 정말 감사합니다!<br>한국 여행 즐겁게 하세요!</div>
+  </div>
+  <div class="gift-card">
+    <div class="main-text">🎁 선물 증정 시</div>
+    <div class="main-text" style="font-weight:400; font-size:14px;">よろしければ、このプレゼントをどうぞ。ご参加ありがとうございました！</div>
+    <div class="pronunciation">요로시케레바, 코노 푸레젠토오 도-조. 고산카 아리가토- 고자이마시타!</div>
+    <div class="kr-text">(선물이에요, 참여해주셔서 감사합니다!)</div>
+  </div>
+
+  <div class="tips-card">
+    <h3>💡 現場対応のコツ | 현장 대응 팁</h3>
+    <div class="tip-item"><strong>断られた時 (거절당하면):</strong><br>大丈夫です、ありがとうございます！楽しんでいってください！<br><span style="font-size:12px;color:#888;">다이죠-부데스, 아리가토- 고자이마스! 타노신데 잇테 쿠다사이!</span></div>
+    <div class="tip-item"><strong>時間がない時 → 3問だけ (시간 없으면 3개만):</strong><br>じゃあ大事な3つだけ！1分で終わります！<br><span style="font-size:12px;color:#888;">쟈아 다이지나 밋츠다케! 잇푼데 오와리마스!</span><br><span class="mini-badge">Q2</span> 번역앱? <span class="mini-badge">Q3</span> Papago? <span class="mini-badge">Q9</span> 가장 불편한 것?</div>
+    <div class="tip-item"><strong>한국어 공부 중인 일본인 발견 시:</strong><br>韓国語の勉強してますか？という確認で詳しい回答が得られる<br><span style="font-size:12px;color:#888;">칸코쿠고노 벤쿄- 시테마스카?</span></div>
+    <div class="tip-item"><strong>메모 포인트:</strong> PayPay 인식 여부, Papago vs Google 사용률, X(Twitter) 정보 출처 비율</div>
+  </div>
+
+  <div class="footer">Papago 워크샵 · 외국인 관광객 현장 리서치<br>2026.05.29 · Team 3 (강남권)</div>
+</div>
+
+<div class="bottom-bar">
+  <button class="btn-save" onclick="saveInterview()">💾 저장</button>
+  <button class="btn-new" onclick="newInterview()">＋ 새 인터뷰</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  let interviewNum = 1;
+  let savedInterviews = [];
+
+  function collectAnswers() {
+    const answers = {};
+    document.querySelectorAll('.answer-textarea').forEach(ta => {
+      answers['Q' + ta.dataset.q] = ta.value;
+    });
+    return { no: interviewNum, lang: '日本語', timestamp: new Date().toISOString(), answers };
+  }
+
+  function saveInterview() {
+    const data = collectAnswers();
+    savedInterviews.push(data);
+    const blob = new Blob([JSON.stringify(savedInterviews, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `interview_JP_${new Date().toISOString().slice(0,10)}_#${interviewNum}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`인터뷰 #${interviewNum} 저장 완료 ✓`);
+  }
+
+  function newInterview() {
+    const data = collectAnswers();
+    const hasContent = Object.values(data.answers).some(v => v.trim().length > 0);
+    if (hasContent) savedInterviews.push(data);
+    interviewNum++;
+    document.getElementById('interview-count').textContent = `인터뷰 #${interviewNum}`;
+    document.querySelectorAll('.answer-textarea').forEach(ta => ta.value = '');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast(`새 인터뷰 #${interviewNum} 시작!`);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>

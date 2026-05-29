@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🇨🇳 중국어 인터뷰 스크립트</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --purple: #667eea; --dark-purple: #764ba2; --light-purple: #e7f3ff;
+    --dark: #111; --mid: #555; --light: #888;
+    --bg: #f5f5f5; --white: #fff; --border: #e0e0e0; --green-bg: #e8f5e9;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    font-family: 'Noto Sans KR', 'Noto Sans SC', sans-serif;
+    color: var(--dark); min-height: 100vh;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+  .sticky-header {
+    position: sticky; top: 0; z-index: 100;
+    background: linear-gradient(135deg, var(--purple), var(--dark-purple));
+    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .sticky-header h1 { font-size: 14px; font-weight: 700; color: #fff; }
+  .interview-count {
+    background: rgba(255,255,255,0.2); color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+  }
+  .quick-nav {
+    display: flex; overflow-x: auto; gap: 6px;
+    padding: 10px 16px; background: var(--white);
+    border-bottom: 1px solid var(--border); scrollbar-width: none;
+  }
+  .quick-nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex-shrink: 0; background: var(--light-purple); color: var(--purple);
+    border: none; border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    padding: 6px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .nav-btn.active { background: var(--purple); color: #fff; }
+  .content { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .greeting-card {
+    background: linear-gradient(135deg, var(--purple), var(--dark-purple));
+    color: #fff; padding: 20px; border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(102,126,234,0.35);
+  }
+  .greeting-card .main-text { font-size: 17px; font-weight: 700; line-height: 1.7; margin-bottom: 8px; }
+  .greeting-card .pronunciation { font-size: 12px; color: rgba(255,255,255,0.78); font-style: italic; line-height: 1.7; margin-bottom: 8px; }
+  .greeting-card .kr-text { font-size: 12px; opacity: 0.85; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; }
+  .alt-card { background: var(--green-bg); border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .alt-card .label { font-weight: 700; color: #2e7d32; margin-bottom: 4px; font-size: 13px; }
+  .alt-card .main-text { font-size: 15px; color: #333; margin-bottom: 4px; }
+  .alt-card .pronunciation { font-size: 12px; color: #666; font-style: italic; margin-bottom: 4px; }
+  .alt-card .kr-text { font-size: 12px; color: #888; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--light); margin: 4px 0 2px; }
+  .q-card { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid var(--purple); }
+  .q-card-header { padding: 14px 14px 10px; display: flex; align-items: flex-start; gap: 10px; }
+  .q-num { background: var(--purple); color: #fff; font-weight: 700; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .q-meta { flex: 1; }
+  .q-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .badge-cat { background: var(--light-purple); color: #0066cc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+  .badge-pri { background: #ff6b6b; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+  .q-body { padding: 0 14px 14px; }
+  .q-main { font-size: 17px; font-weight: 700; color: #222; line-height: 1.6; margin-bottom: 6px; }
+  .q-pronunciation { font-size: 12px; color: var(--purple); font-style: italic; line-height: 1.6; margin-bottom: 6px; background: #f0f0ff; padding: 6px 10px; border-radius: 6px; border-left: 3px solid var(--purple); }
+  .q-kr { font-size: 12px; color: var(--light); margin-bottom: 10px; }
+  .hint-box { background: #fafafa; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .hint-label { font-size: 10px; font-weight: 700; color: var(--purple); margin-bottom: 4px; letter-spacing: 0.05em; }
+  .answer-textarea {
+    width: 100%; border: 2px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; min-height: 60px; font-size: 14px;
+    font-family: inherit; color: var(--dark); background: #fafafa;
+    resize: none; line-height: 1.6; -webkit-appearance: none; outline: none;
+  }
+  .answer-textarea:focus { border-color: var(--purple); background: #fff; }
+  .answer-textarea.tall { min-height: 90px; }
+  .closing-card { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; padding: 20px; border-radius: 14px; box-shadow: 0 4px 16px rgba(245,87,108,0.3); margin-bottom: 10px; }
+  .closing-card .main-text { font-size: 17px; font-weight: 700; line-height: 1.7; margin-bottom: 8px; }
+  .closing-card .pronunciation { font-size: 12px; color: rgba(255,255,255,0.78); font-style: italic; line-height: 1.7; margin-bottom: 8px; }
+  .closing-card .kr-text { font-size: 12px; opacity: 0.85; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; line-height: 1.6; }
+  .gift-card { background: #fff3e0; border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .gift-card .label { font-weight: 700; color: #e65100; margin-bottom: 4px; }
+  .gift-card .main-text { font-size: 14px; color: #555; margin-bottom: 4px; }
+  .gift-card .pronunciation { font-size: 12px; color: #888; font-style: italic; margin-bottom: 4px; }
+  .gift-card .kr-text { font-size: 12px; color: #888; }
+  .tips-card { background: #fff9e6; border: 2px solid #ffd700; border-radius: 14px; padding: 16px; }
+  .tips-card h3 { color: #ff8c00; font-size: 15px; margin-bottom: 12px; font-weight: 700; }
+  .tip-item { padding: 10px 0; border-bottom: 1px solid #fff0ab; font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .tip-item:last-child { border-bottom: none; }
+  .tip-item strong { color: #333; }
+  .mini-badge { display: inline-block; background: #ffeb3b; color: #333; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; margin: 0 2px; }
+  .footer { text-align: center; padding: 24px 16px; font-size: 11px; color: var(--light); line-height: 1.7; }
+
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--white); border-top: 1px solid var(--border);
+    padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 10px; z-index: 200;
+  }
+  .btn-save { flex: 1; background: var(--dark); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 14px; padding: 14px; cursor: pointer; transition: opacity 0.15s; }
+  .btn-save:active { opacity: 0.8; }
+  .btn-new { flex: 1; background: var(--purple); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 14px; padding: 14px; cursor: pointer; transition: opacity 0.15s; }
+  .btn-new:active { opacity: 0.8; }
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--dark); color: #fff; font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 20px; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; z-index: 300; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <h1>🇨🇳 中国游客 인터뷰 스크립트</h1>
+  <span class="interview-count" id="interview-count">인터뷰 #1</span>
+</div>
+
+<div class="quick-nav">
+  <button class="nav-btn active" onclick="scrollTo(0,0)">🎬 인사</button>
+  <button class="nav-btn" onclick="document.getElementById('q1').scrollIntoView({behavior:'smooth'})">Q1</button>
+  <button class="nav-btn" onclick="document.getElementById('q2').scrollIntoView({behavior:'smooth'})">Q2 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q3').scrollIntoView({behavior:'smooth'})">Q3 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q4').scrollIntoView({behavior:'smooth'})">Q4 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q5').scrollIntoView({behavior:'smooth'})">Q5</button>
+  <button class="nav-btn" onclick="document.getElementById('q6').scrollIntoView({behavior:'smooth'})">Q6</button>
+  <button class="nav-btn" onclick="document.getElementById('q7').scrollIntoView({behavior:'smooth'})">Q7</button>
+  <button class="nav-btn" onclick="document.getElementById('q8').scrollIntoView({behavior:'smooth'})">Q8</button>
+  <button class="nav-btn" onclick="document.getElementById('q9').scrollIntoView({behavior:'smooth'})">Q9 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('closing').scrollIntoView({behavior:'smooth'})">🎬 마무리</button>
+</div>
+
+<div class="content">
+
+  <div class="section-label">🎬 开场 | 시작 인사</div>
+  <div class="greeting-card">
+    <div class="main-text">你好！我们正在做外国游客韩国旅行体验调查。<br>能占用您3分钟，问几个简单的问题吗？</div>
+    <div class="pronunciation">니하오! 워먼 정짜이 쭤 와이구어 요우커 한궈 뤼싱 티옌 댜오차.<br>넝 잔융 닌 싼펀종, 원 지거 지엔단더 원티마?</div>
+    <div class="kr-text">안녕하세요! 외국인 관광객 한국 여행 경험 조사 중입니다.<br>3분만 간단한 질문 몇 가지 여쭤봐도 될까요?</div>
+  </div>
+  <div class="alt-card">
+    <div class="label">💬 부드러운 버전</div>
+    <div class="main-text">你好！不好意思打扰一下～我们在做关于外国游客的调查，就3分钟，可以吗？</div>
+    <div class="pronunciation">니하오! 부하오이쓰 다라오 이샤~ 워먼 짜이 쭤 관위 와이구어 요우커더 댜오차, 지우 싼펀종, 커이마?</div>
+    <div class="kr-text">(안녕하세요! 실례합니다~ 외국인 관광객 조사 중인데요, 3분이면 돼요, 괜찮으세요?)</div>
+  </div>
+
+  <div class="section-label" style="margin-top:8px;">❓ 核心问题 | 핵심 질문 (9개)</div>
+
+  <div class="q-card" id="q1">
+    <div class="q-card-header"><div class="q-num">1</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">基本信息</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">这是您第几次来韩国？</div>
+      <div class="q-pronunciation">쩌 스 닌 디 지 츠 라이 한궈?</div>
+      <div class="q-kr">한국 방문이 몇 번째예요?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>第一次 (띠 이 츠) / 第二次 (띠 얼 츠) / 来过好几次了 (라이 궈 하오 지 츠 러)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="1"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q2">
+    <div class="q-card-header"><div class="q-num">2</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">翻译/번역</span><span class="badge-pri">최우선 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">在韩国旅行时用翻译APP吗？用哪个？</div>
+      <div class="q-pronunciation">짜이 한궈 뤼싱 스 용 판이 APP 마? 용 나 거?</div>
+      <div class="q-kr">여행 중 번역 앱 써요? 어떤 거?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>用Papago (용 파파고) / Google翻译 (구거 판이) / 百度翻译 (바이두 판이) / 有道 (요우다오) / 没怎么用 (메이 전머 용)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="2"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q3">
+    <div class="q-card-header"><div class="q-num">3</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">翻译/번역</span><span class="badge-pri">최우선 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">您用过Papago吗？感觉怎么样？</div>
+      <div class="q-pronunciation">닌 용 궈 파파고 마? 간쥐에 전머양?</div>
+      <div class="q-kr">Papago 써보셨어요? 어떠셨어요?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>用过，挺好用的 (용 궈, 팅 하오 용 더) / 没用过，一般用Google翻译 / 听说过，但还没用 (팅 슈어 궈, 단 하이 메이 용)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="3"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q4">
+    <div class="q-card-header"><div class="q-num">4</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">翻译/번역</span><span class="badge-pri">최우선 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">翻译APP在哪些情况下最需要？</div>
+      <div class="q-pronunciation">판이 APP 짜이 나 시에 칭쾅 샤 쭈이 쉬야오?</div>
+      <div class="q-kr">번역 앱 어떤 상황에서 가장 필요해요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>比如点菜？购物？还是问路？<br><span style="font-size:12px;color:#888;">(비루 디엔 차이? 고우 우? 하이 스 원 루?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>点菜的时候 (디엔 차이 더 스허우) / 购物的时候 (고우 우 더 스허우) / 看不懂菜单 (칸 부 동 차이 딴)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="4"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q5">
+    <div class="q-card-header"><div class="q-num">5</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">导航/내비게이션</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">用地图APP时遇到过困难吗？</div>
+      <div class="q-pronunciation">용 띠투 APP 스 위 따오 궈 쿤난 마?</div>
+      <div class="q-kr">지도 앱 쓸 때 어려움 있었어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>比如找不到路？还是不知道用哪个APP？<br><span style="font-size:12px;color:#888;">(비루 자오 부 따오 루? 하이 스 부 즈다오 용 나 거 APP?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>Naver地图不太会用 (네이버 띠투 부 타이 후이 용) / 地铁标识看不懂 (띠티에 비아오즈 칸 부 동)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="5"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q6">
+    <div class="q-card-header"><div class="q-num">6</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">支付/결제</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">购物时主要怎么付款？现金？卡？还是支付宝？</div>
+      <div class="q-pronunciation">고우 우 스 주야오 전머 푸 관? 시엔 진? 카? 하이 스 즈푸바오?</div>
+      <div class="q-kr">쇼핑 시 주로 어떻게 결제해요? 현금? 카드? 알리페이?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>刷卡 (솨 카) / 现金 (시엔 진) / 支付宝可以用 (즈푸바오 커이 용) / 微信支付 (웨이신 즈푸)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="6"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q7">
+    <div class="q-card-header"><div class="q-num">7</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">支付/결제</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">免税退税流程顺利吗？</div>
+      <div class="q-pronunciation">미엔 쉐이 투이 쉐이 리우 청 순 리 마?</div>
+      <div class="q-kr">면세 환급 과정 순조로웠어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>如果遇到问题，是什么问题？<br><span style="font-size:12px;color:#888;">(루 궈 위 따오 원 티, 스 선머 원 티?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>还行，挺简单的 (하이 싱, 팅 지엔 단 더) / 不太懂流程 (부 타이 동 리우 청) / 不知道在哪里退税</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="7"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q8">
+    <div class="q-card-header"><div class="q-num">8</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">信息来源/정보 출처</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">您在哪儿找的韩国旅游信息？</div>
+      <div class="q-pronunciation">닌 짜이 나얼 자오 더 한궈 뤼요우 신시?</div>
+      <div class="q-kr">한국 여행 정보 어디서 찾으셨어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 후속 질문</div>小红书？YouTube？还是旅游网站？<br><span style="font-size:12px;color:#888;">(샤오홍슈? 유투브? 하이 스 뤼요우 왕잔?)</span></div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변</div>小红书 (샤오홍슈) / 看YouTube (칸 유투브) / 朋友推荐 (펑요우 투이지엔) / 抖音 (도우인) / 马蜂窝 (마펑워)</div>
+      <textarea class="answer-textarea" placeholder="[ 메모 ]" data-q="8"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q9">
+    <div class="q-card-header"><div class="q-num">9</div><div class="q-meta"><div class="q-badges"><span class="badge-cat">开放式/개방형</span><span class="badge-pri">핵심 ⭐</span></div></div></div>
+    <div class="q-body">
+      <div class="q-main">在韩国旅行中，什么最不方便？</div>
+      <div class="q-pronunciation">짜이 한궈 뤼싱 중, 선머 쭈이 부 팡비엔?</div>
+      <div class="q-kr">한국 여행 중 뭐가 가장 불편했어요?</div>
+      <div class="hint-box"><div class="hint-label">📌 예상 답변 (개방형)</div>语言不通 (위옌 부 통) / 地铁标识看不懂 / 付款方式少 (푸관 팡스 샤오) / 餐厅菜单没中文 / 网络不好 (왕루어 부 하오)</div>
+      <textarea class="answer-textarea tall" placeholder="[ 메모 — 상세히 기록 ]" data-q="9"></textarea>
+    </div>
+  </div>
+
+  <div class="section-label" id="closing" style="margin-top:8px;">🎬 结束 | 마무리 인사</div>
+  <div class="closing-card">
+    <div class="main-text">好的，非常感谢您的配合！<br>祝您在韩国旅行愉快！</div>
+    <div class="pronunciation">하오 더, 페이창 간시에 닌 더 페이허!<br>주 닌 짜이 한궈 뤼싱 위콰이!</div>
+    <div class="kr-text">네, 정말 감사합니다!<br>한국 여행 즐겁게 하세요!</div>
+  </div>
+  <div class="gift-card">
+    <div class="label">🎁 선물 증정 시</div>
+    <div class="main-text">这是我们准备的小礼物，感谢您的参与！</div>
+    <div class="pronunciation">쩌 스 워먼 준베이 더 샤오 리우, 간시에 닌 더 찬위!</div>
+    <div class="kr-text">(작은 선물이에요, 참여해주셔서 감사합니다!)</div>
+  </div>
+
+  <div class="tips-card">
+    <h3>💡 现场应对技巧 | 현장 대응 팁</h3>
+    <div class="tip-item"><strong>被拒绝时 (거절당하면):</strong><br>没关系，谢谢！祝您玩得开心！<br><span style="font-size:12px;color:#888;">메이 관시, 시에시에! 주 닌 완 더 카이신!</span></div>
+    <div class="tip-item"><strong>时间紧张时 (시간 촉박하면):</strong><br>那我就问最重要的3个问题，1分钟就好！<br><span style="font-size:12px;color:#888;">나 워 지우 원 쭈이 중야오 더 싼 거 원티, 이 펀종 지우 하오!</span><br><span class="mini-badge">Q2</span> 번역앱? <span class="mini-badge">Q3</span> Papago? <span class="mini-badge">Q9</span> 가장 불편한 것?</div>
+    <div class="tip-item"><strong>분위기 조성:</strong> 웃으면서 접근, "就3分钟 (지우 싼 펀종)" 강조로 부담 줄이기</div>
+    <div class="tip-item"><strong>핵심 키워드:</strong> 用翻译APP吗？(용 판이 APP 마?) / 哪个？(나 거?) / 最不方便的？(쭈이 부 팡비엔 더?)</div>
+  </div>
+
+  <div class="footer">Papago 워크샵 · 외국인 관광객 현장 리서치<br>2026.05.29 · Team 3 (강남권)</div>
+</div>
+
+<div class="bottom-bar">
+  <button class="btn-save" onclick="saveInterview()">💾 저장</button>
+  <button class="btn-new" onclick="newInterview()">＋ 새 인터뷰</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  let interviewNum = 1;
+  let savedInterviews = [];
+
+  function collectAnswers() {
+    const answers = {};
+    document.querySelectorAll('.answer-textarea').forEach(ta => {
+      answers['Q' + ta.dataset.q] = ta.value;
+    });
+    return { no: interviewNum, lang: '中文', timestamp: new Date().toISOString(), answers };
+  }
+
+  function saveInterview() {
+    const data = collectAnswers();
+    savedInterviews.push(data);
+    const blob = new Blob([JSON.stringify(savedInterviews, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `interview_CN_${new Date().toISOString().slice(0,10)}_#${interviewNum}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`인터뷰 #${interviewNum} 저장 완료 ✓`);
+  }
+
+  function newInterview() {
+    const data = collectAnswers();
+    const hasContent = Object.values(data.answers).some(v => v.trim().length > 0);
+    if (hasContent) savedInterviews.push(data);
+    interviewNum++;
+    document.getElementById('interview-count').textContent = `인터뷰 #${interviewNum}`;
+    document.querySelectorAll('.answer-textarea').forEach(ta => ta.value = '');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast(`새 인터뷰 #${interviewNum} 시작!`);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>

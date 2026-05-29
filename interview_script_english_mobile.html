@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🇺🇸 English Interview Script</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --blue: #1a73e8; --dark-blue: #0d47a1; --light-blue: #e8f0fe;
+    --green: #34a853; --dark: #111; --mid: #555; --light: #888;
+    --bg: #f5f5f5; --white: #fff; --border: #e0e0e0;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    font-family: -apple-system, "Helvetica Neue", 'Noto Sans KR', sans-serif;
+    color: var(--dark); min-height: 100vh;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+  .sticky-header {
+    position: sticky; top: 0; z-index: 100;
+    background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .sticky-header h1 { font-size: 14px; font-weight: 700; color: #fff; }
+  .interview-count {
+    background: rgba(255,255,255,0.2); color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+  }
+  .quick-nav {
+    display: flex; overflow-x: auto; gap: 6px;
+    padding: 10px 16px; background: var(--white);
+    border-bottom: 1px solid var(--border); scrollbar-width: none;
+  }
+  .quick-nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex-shrink: 0; background: var(--light-blue); color: var(--blue);
+    border: none; border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    padding: 6px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .nav-btn.active { background: var(--blue); color: #fff; }
+  .content { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .greeting-card {
+    background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+    color: #fff; padding: 20px; border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(26,115,232,0.3);
+  }
+  .greeting-card .main-text { font-size: 17px; font-weight: 700; line-height: 1.6; margin-bottom: 10px; }
+  .greeting-card .kr-text {
+    font-size: 12px; opacity: 0.85; line-height: 1.6;
+    border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px;
+  }
+  .alt-card { background: #e8f5e9; border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .alt-card .label { font-weight: 700; color: #2e7d32; margin-bottom: 4px; font-size: 13px; }
+  .alt-card .main-text { font-size: 15px; color: #333; }
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--light); margin: 4px 0 2px;
+  }
+  .q-card {
+    background: var(--white); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    border-left: 4px solid var(--blue);
+  }
+  .q-card-header { padding: 14px 14px 10px; display: flex; align-items: flex-start; gap: 10px; }
+  .q-num {
+    background: var(--blue); color: #fff; font-weight: 700; font-size: 13px;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .q-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+  .badge-cat { background: var(--light-blue); color: var(--blue); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+  .badge-pri { background: #ea4335; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+  .q-body { padding: 0 14px 14px; }
+  .q-main { font-size: 17px; font-weight: 700; color: #222; line-height: 1.5; margin-bottom: 6px; }
+  .q-kr { font-size: 12px; color: var(--light); margin-bottom: 10px; }
+  .hint-box { background: #fafafa; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .hint-label { font-size: 10px; font-weight: 700; color: var(--blue); margin-bottom: 4px; letter-spacing: 0.05em; }
+  .answer-textarea {
+    width: 100%; border: 2px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; min-height: 60px; font-size: 14px;
+    font-family: inherit; color: var(--dark); background: #fafafa;
+    resize: none; line-height: 1.6; -webkit-appearance: none; outline: none;
+  }
+  .answer-textarea:focus { border-color: var(--blue); background: #fff; }
+  .answer-textarea.tall { min-height: 90px; }
+  .closing-card {
+    background: linear-gradient(135deg, var(--green), #1a7a33);
+    color: #fff; padding: 20px; border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(52,168,83,0.3); margin-bottom: 10px;
+  }
+  .closing-card .main-text { font-size: 17px; font-weight: 700; line-height: 1.6; margin-bottom: 8px; }
+  .closing-card .kr-text {
+    font-size: 12px; opacity: 0.85;
+    border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; line-height: 1.6;
+  }
+  .gift-card { background: #e8f5e9; border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .gift-card .label { font-weight: 700; color: #2e7d32; margin-bottom: 4px; }
+  .gift-card .main-text { font-size: 14px; color: #555; }
+  .tips-card { background: #fff9e6; border: 2px solid #fbbc04; border-radius: 14px; padding: 16px; }
+  .tips-card h3 { color: #e37400; font-size: 15px; margin-bottom: 12px; font-weight: 700; }
+  .tip-item { padding: 10px 0; border-bottom: 1px solid #fce9a0; font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .tip-item:last-child { border-bottom: none; }
+  .tip-item strong { color: #333; }
+  .mini-badge { display: inline-block; background: #fbbc04; color: #333; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; margin: 0 2px; }
+  .footer { text-align: center; padding: 24px 16px; font-size: 11px; color: var(--light); line-height: 1.7; }
+
+  /* ── Bottom action bar ── */
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--white); border-top: 1px solid var(--border);
+    padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 10px; z-index: 200;
+  }
+  .btn-save {
+    flex: 1; background: var(--dark); color: #fff; border: none;
+    border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 14px;
+    padding: 14px; cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn-save:active { opacity: 0.8; }
+  .btn-new {
+    flex: 1; background: var(--blue); color: #fff; border: none;
+    border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 14px;
+    padding: 14px; cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn-new:active { opacity: 0.8; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--dark); color: #fff; font-size: 13px; font-weight: 500;
+    padding: 10px 20px; border-radius: 20px;
+    opacity: 0; transition: all 0.3s; pointer-events: none;
+    white-space: nowrap; z-index: 300;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <h1>🇺🇸 English Tourist Interview Script</h1>
+  <span class="interview-count" id="interview-count">Interview #1</span>
+</div>
+
+<div class="quick-nav">
+  <button class="nav-btn active" onclick="scrollTo(0,0)">🎬 Opening</button>
+  <button class="nav-btn" onclick="document.getElementById('q1').scrollIntoView({behavior:'smooth'})">Q1</button>
+  <button class="nav-btn" onclick="document.getElementById('q2').scrollIntoView({behavior:'smooth'})">Q2 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q3').scrollIntoView({behavior:'smooth'})">Q3 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q4').scrollIntoView({behavior:'smooth'})">Q4 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('q5').scrollIntoView({behavior:'smooth'})">Q5</button>
+  <button class="nav-btn" onclick="document.getElementById('q6').scrollIntoView({behavior:'smooth'})">Q6</button>
+  <button class="nav-btn" onclick="document.getElementById('q7').scrollIntoView({behavior:'smooth'})">Q7</button>
+  <button class="nav-btn" onclick="document.getElementById('q8').scrollIntoView({behavior:'smooth'})">Q8</button>
+  <button class="nav-btn" onclick="document.getElementById('q9').scrollIntoView({behavior:'smooth'})">Q9 ⭐</button>
+  <button class="nav-btn" onclick="document.getElementById('closing').scrollIntoView({behavior:'smooth'})">🎬 Closing</button>
+</div>
+
+<div class="content">
+
+  <div class="section-label">🎬 Opening</div>
+  <div class="greeting-card">
+    <div class="main-text">Hi there! We're doing a quick survey about foreign tourists' experiences in Korea.<br>Do you have about 3 minutes for a few simple questions?</div>
+    <div class="kr-text">한국 여행 경험 조사 중이에요. 3분만 시간 내주실 수 있어요?</div>
+  </div>
+  <div class="alt-card">
+    <div class="label">💬 Casual version</div>
+    <div class="main-text">Sorry to bother you! We're doing a short survey — just 3 minutes, would that be okay?</div>
+  </div>
+
+  <div class="section-label" style="margin-top:8px;">❓ Core Questions (9)</div>
+
+  <div class="q-card" id="q1">
+    <div class="q-card-header"><div class="q-num">1</div><div class="q-badges"><span class="badge-cat">Background</span></div></div>
+    <div class="q-body">
+      <div class="q-main">Is this your first visit to Korea? How many times have you been?</div>
+      <div class="q-kr">한국 방문이 몇 번째예요?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>First time! / Second visit / Been a few times now</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="1"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q2">
+    <div class="q-card-header"><div class="q-num">2</div><div class="q-badges"><span class="badge-cat">Translation</span><span class="badge-pri">KEY ⭐</span></div></div>
+    <div class="q-body">
+      <div class="q-main">Do you use any translation apps while traveling? Which one?</div>
+      <div class="q-kr">번역 앱 써요? 어떤 거?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>Google Translate / Papago / DeepL / Naver / Don't really use one</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="2"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q3">
+    <div class="q-card-header"><div class="q-num">3</div><div class="q-badges"><span class="badge-cat">Translation</span><span class="badge-pri">KEY ⭐</span></div></div>
+    <div class="q-body">
+      <div class="q-main">Have you heard of or used Papago? What did you think?</div>
+      <div class="q-kr">Papago 써보셨어요? 어떠셨어요?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>Yes, it's great! / Never heard of it / Prefer Google Translate</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="3"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q4">
+    <div class="q-card-header"><div class="q-num">4</div><div class="q-badges"><span class="badge-cat">Translation</span><span class="badge-pri">KEY ⭐</span></div></div>
+    <div class="q-body">
+      <div class="q-main">When do you find translation apps most useful?</div>
+      <div class="q-kr">번역 앱 어떤 상황에서 가장 필요해요?</div>
+      <div class="hint-box"><div class="hint-label">💬 Follow-up</div>Like ordering food? Shopping? Reading signs? Getting around?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>Ordering at restaurants / Shopping / Reading menus / Signs on the subway</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="4"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q5">
+    <div class="q-card-header"><div class="q-num">5</div><div class="q-badges"><span class="badge-cat">Navigation</span></div></div>
+    <div class="q-body">
+      <div class="q-main">Have you had any trouble navigating with map apps?</div>
+      <div class="q-kr">지도 앱 쓸 때 어려움 있었어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 Follow-up</div>Like Google Maps not working properly? Or not knowing which app to use?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>Google Maps was fine / Subway was confusing / Street addresses were hard to follow</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="5"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q6">
+    <div class="q-card-header"><div class="q-num">6</div><div class="q-badges"><span class="badge-cat">Payment</span></div></div>
+    <div class="q-body">
+      <div class="q-main">How do you usually pay when shopping? Card? Apple Pay? Cash?</div>
+      <div class="q-kr">쇼핑할 때 결제를 주로 어떻게 해요?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>Credit/debit card / Apple Pay / Google Pay / Cash / Some places didn't take my card</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="6"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q7">
+    <div class="q-card-header"><div class="q-num">7</div><div class="q-badges"><span class="badge-cat">Payment</span></div></div>
+    <div class="q-body">
+      <div class="q-main">Did the tax refund process work out smoothly for you?</div>
+      <div class="q-kr">면세 환급 과정 순조로웠어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 Follow-up</div>Any issues? Did you know how the refund kiosks work?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>Pretty easy, actually / Didn't know about it / The kiosk was confusing / Didn't bother</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="7"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q8">
+    <div class="q-card-header"><div class="q-num">8</div><div class="q-badges"><span class="badge-cat">Info Sources</span></div></div>
+    <div class="q-body">
+      <div class="q-main">Where did you get your travel info about Korea?</div>
+      <div class="q-kr">한국 여행 정보 어디서 찾으셨어요?</div>
+      <div class="hint-box"><div class="hint-label">💬 Follow-up</div>Instagram? YouTube? Reddit? TikTok? Travel blogs?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>YouTube travel vlogs / Instagram / Reddit (r/korea) / TikTok / Lonely Planet / Friend's recommendation</div>
+      <textarea class="answer-textarea" placeholder="[ notes ]" data-q="8"></textarea>
+    </div>
+  </div>
+
+  <div class="q-card" id="q9">
+    <div class="q-card-header"><div class="q-num">9</div><div class="q-badges"><span class="badge-cat">Open-ended</span><span class="badge-pri">KEY ⭐</span></div></div>
+    <div class="q-body">
+      <div class="q-main">What's been the most inconvenient thing about traveling in Korea?</div>
+      <div class="q-kr">한국 여행 중 뭐가 가장 불편했어요?</div>
+      <div class="hint-box"><div class="hint-label">📌 Expected answers</div>Language barrier / Confusing subway / Some places cash-only / Hard to find English menus / WiFi issues</div>
+      <textarea class="answer-textarea tall" placeholder="[ notes — write in detail ]" data-q="9"></textarea>
+    </div>
+  </div>
+
+  <div class="section-label" id="closing" style="margin-top:8px;">🎬 Closing</div>
+  <div class="closing-card">
+    <div class="main-text">That's everything! Thank you so much for your time. 😊<br>Hope you enjoy the rest of your trip in Korea!</div>
+    <div class="kr-text">참여해주셔서 정말 감사합니다! 한국 여행 즐겁게 하세요!</div>
+  </div>
+  <div class="gift-card">
+    <div class="label">🎁 With a gift</div>
+    <div class="main-text">We have a small gift to say thank you for participating!</div>
+  </div>
+
+  <div class="tips-card">
+    <h3>💡 Field Tips</h3>
+    <div class="tip-item"><strong>If they decline:</strong><br>No worries at all! Enjoy your trip! 😊</div>
+    <div class="tip-item"><strong>Short on time? → Just ask 3 questions:</strong><br><span class="mini-badge">Q2</span> Translation app? <span class="mini-badge">Q3</span> Know Papago? <span class="mini-badge">Q9</span> Biggest inconvenience?</div>
+    <div class="tip-item"><strong>Keyword-only:</strong> Translation app? — Which one? — Map issues? — How do you pay? — Biggest hassle?</div>
+    <div class="tip-item"><strong>Note:</strong> Western tourists often don't know Papago exists — Q3 reaction is especially valuable data</div>
+  </div>
+
+  <div class="footer">Papago Workshop · Foreign Tourist Field Research<br>2026.05.29 · Team 3 (Gangnam Area)</div>
+</div>
+
+<!-- Bottom Action Bar -->
+<div class="bottom-bar">
+  <button class="btn-save" onclick="saveInterview()">💾 저장</button>
+  <button class="btn-new" onclick="newInterview()">＋ 새 인터뷰</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  let interviewNum = 1;
+  let savedInterviews = [];
+
+  function collectAnswers() {
+    const answers = {};
+    document.querySelectorAll('.answer-textarea').forEach(ta => {
+      answers['Q' + ta.dataset.q] = ta.value;
+    });
+    return {
+      no: interviewNum,
+      lang: 'English',
+      timestamp: new Date().toISOString(),
+      answers
+    };
+  }
+
+  function saveInterview() {
+    const data = collectAnswers();
+    savedInterviews.push(data);
+
+    const blob = new Blob([JSON.stringify(savedInterviews, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const date = new Date().toISOString().slice(0,10);
+    a.download = `interview_EN_${date}_#${interviewNum}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`Interview #${interviewNum} saved ✓`);
+  }
+
+  function newInterview() {
+    const data = collectAnswers();
+    const hasContent = Object.values(data.answers).some(v => v.trim().length > 0);
+    if (hasContent) savedInterviews.push(data);
+
+    interviewNum++;
+    document.getElementById('interview-count').textContent = `Interview #${interviewNum}`;
+    document.querySelectorAll('.answer-textarea').forEach(ta => ta.value = '');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast(`New interview #${interviewNum} started!`);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
