@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>📷 이미지 수집</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Space+Mono:wght@700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --green: #03C75A; --dark: #111; --mid: #444; --light: #888;
+    --bg: #F4F4F0; --white: #fff; --border: #E0E0DA;
+    --orange: #FF6B35; --blue: #4A90E2; --purple: #9B59B6;
+    --teal: #1ABC9C; --pink: #E91E8C; --yellow: #F39C12;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); font-family: 'Noto Sans KR', sans-serif;
+    color: var(--dark); min-height: 100vh;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ── Header ── */
+  .sticky-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--dark); padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .papago-badge {
+    background: var(--green); color: var(--dark);
+    font-family: 'Space Mono', monospace; font-weight: 700;
+    font-size: 10px; padding: 3px 8px; border-radius: 3px;
+  }
+  .sticky-header h1 { font-size: 13px; font-weight: 700; color: #fff; }
+  .count-badge {
+    background: rgba(255,255,255,0.15); color: #ccc;
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    padding: 3px 9px; border-radius: 20px;
+  }
+
+  /* ── Category tabs ── */
+  .cat-tabs {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 10px 16px; display: flex; gap: 6px;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    flex-shrink: 0; border: 2px solid var(--border); background: var(--white);
+    border-radius: 20px; font-size: 12px; font-weight: 700;
+    padding: 6px 14px; cursor: pointer; white-space: nowrap;
+    color: var(--mid); transition: all 0.12s;
+  }
+  .cat-btn.active { border-color: var(--green); background: var(--green); color: var(--dark); }
+
+  /* ── Add form ── */
+  .add-form {
+    background: var(--white); margin: 12px 16px;
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 2px solid var(--green);
+  }
+  .add-form-header {
+    background: var(--green); padding: 12px 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .add-form-header span { font-size: 13px; font-weight: 700; color: var(--dark); }
+  .add-form-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  .field-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--light); display: block; margin-bottom: 5px;
+  }
+
+  /* category selector */
+  .cat-select-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .cat-option { display: flex; }
+  .cat-option input[type="radio"] { display: none; }
+  .cat-option-label {
+    width: 100%; text-align: center; border: 1.5px solid var(--border);
+    border-radius: 10px; font-size: 11px; font-weight: 700;
+    padding: 8px 4px; cursor: pointer; color: var(--mid);
+    transition: all 0.12s; line-height: 1.4;
+  }
+  .cat-option input:checked + .cat-option-label {
+    color: var(--white); border-color: transparent;
+  }
+
+  .form-input {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; font-size: 14px; font-family: inherit;
+    color: var(--dark); background: #fafaf8; outline: none;
+    -webkit-appearance: none;
+  }
+  .form-input:focus { border-color: var(--green); background: #fff; }
+  .form-textarea {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; font-size: 14px; font-family: inherit;
+    color: var(--dark); background: #fafaf8; outline: none;
+    resize: none; line-height: 1.6; -webkit-appearance: none; min-height: 70px;
+  }
+  .form-textarea:focus { border-color: var(--green); background: #fff; }
+
+  /* Photo upload */
+  .photo-upload-area {
+    border: 2px dashed var(--border); border-radius: 10px;
+    padding: 16px; text-align: center; cursor: pointer;
+    transition: all 0.15s; background: #fafaf8;
+    position: relative;
+  }
+  .photo-upload-area:active { background: #f0fff6; border-color: var(--green); }
+  .photo-upload-area input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .photo-upload-icon { font-size: 28px; margin-bottom: 6px; }
+  .photo-upload-text { font-size: 13px; color: var(--light); font-weight: 500; }
+  .photo-preview-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px;
+  }
+  .photo-preview-item {
+    position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+  }
+  .photo-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-remove-btn {
+    position: absolute; top: 3px; right: 3px;
+    background: rgba(0,0,0,0.6); color: #fff;
+    border: none; border-radius: 50%; width: 20px; height: 20px;
+    font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+
+  .btn-add-item {
+    width: 100%; background: var(--dark); color: #fff; border: none;
+    border-radius: 10px; font-family: inherit; font-weight: 700;
+    font-size: 15px; padding: 14px; cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn-add-item:active { opacity: 0.8; }
+
+  /* ── Collected items ── */
+  .section-header {
+    padding: 8px 16px 6px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-header-title { font-size: 11px; font-weight: 700; color: var(--light); letter-spacing: 0.08em; text-transform: uppercase; }
+  .items-grid { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+
+  .item-card {
+    background: var(--white); border-radius: 12px;
+    overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex; gap: 0;
+  }
+  .item-accent { width: 5px; flex-shrink: 0; }
+  .item-body { flex: 1; padding: 12px 12px 12px 10px; }
+  .item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+  .item-cat-badge {
+    font-size: 10px; font-weight: 700; padding: 3px 8px;
+    border-radius: 10px; white-space: nowrap;
+  }
+  .item-title { font-size: 14px; font-weight: 700; color: var(--dark); flex: 1; line-height: 1.4; }
+  .item-memo { font-size: 12px; color: var(--light); line-height: 1.5; margin-bottom: 6px; }
+  .item-photos { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+  .item-photo-thumb {
+    width: 56px; height: 56px; border-radius: 6px; object-fit: cover;
+    border: 1.5px solid var(--border);
+  }
+  .item-meta { font-size: 10px; color: #bbb; margin-top: 6px; }
+  .item-delete {
+    background: none; border: none; color: #ccc; font-size: 18px;
+    cursor: pointer; padding: 0 4px; flex-shrink: 0; align-self: flex-start;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 40px 16px; color: var(--light);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; line-height: 1.7; }
+
+  /* ── Bottom bar ── */
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--white); border-top: 1px solid var(--border);
+    padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 8px; z-index: 200;
+  }
+  .btn-export {
+    flex: 1; background: var(--dark); color: #fff; border: none;
+    border-radius: 10px; font-family: inherit; font-weight: 700;
+    font-size: 13px; padding: 13px; cursor: pointer;
+  }
+  .btn-export:active { opacity: 0.8; }
+  .btn-export-imgs {
+    flex: 1; background: var(--green); color: var(--dark); border: none;
+    border-radius: 10px; font-family: inherit; font-weight: 700;
+    font-size: 13px; padding: 13px; cursor: pointer;
+  }
+  .btn-export-imgs:active { opacity: 0.8; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--dark); color: #fff; font-size: 13px; font-weight: 500;
+    padding: 10px 20px; border-radius: 20px; opacity: 0;
+    transition: all 0.3s; pointer-events: none; white-space: nowrap; z-index: 300;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <div class="header-left">
+    <span class="papago-badge">PAPAGO</span>
+    <h1>📷 번역 이미지 수집</h1>
+  </div>
+  <span class="count-badge" id="total-count">0건</span>
+</div>
+
+<!-- Category filter tabs -->
+<div class="cat-tabs">
+  <button class="cat-btn active" onclick="filterCat('all', this)">전체</button>
+  <button class="cat-btn" onclick="filterCat('간판', this)">🏪 간판</button>
+  <button class="cat-btn" onclick="filterCat('메뉴판', this)">🍽 메뉴판</button>
+  <button class="cat-btn" onclick="filterCat('도로표지', this)">🛣 도로표지</button>
+  <button class="cat-btn" onclick="filterCat('관광안내', this)">🗺 관광안내</button>
+  <button class="cat-btn" onclick="filterCat('지하철', this)">🚇 지하철</button>
+  <button class="cat-btn" onclick="filterCat('버스', this)">🚌 버스</button>
+  <button class="cat-btn" onclick="filterCat('상품태그', this)">🏷 상품태그</button>
+  <button class="cat-btn" onclick="filterCat('기타', this)">📌 기타</button>
+</div>
+
+<!-- Add Form -->
+<div class="add-form">
+  <div class="add-form-header">
+    <span>➕ 새 이미지 추가</span>
+  </div>
+  <div class="add-form-body">
+
+    <div>
+      <span class="field-label">카테고리</span>
+      <div class="cat-select-grid">
+        <label class="cat-option">
+          <input type="radio" name="cat" value="간판" checked>
+          <span class="cat-option-label" style="--c:#FF6B35" onclick="setCatColor(this,'#FF6B35')">🏪<br>간판</span>
+        </label>
+        <label class="cat-option">
+          <input type="radio" name="cat" value="메뉴판">
+          <span class="cat-option-label" onclick="setCatColor(this,'#E91E8C')">🍽<br>메뉴판</span>
+        </label>
+        <label class="cat-option">
+          <input type="radio" name="cat" value="도로표지">
+          <span class="cat-option-label" onclick="setCatColor(this,'#4A90E2')">🛣<br>도로표지</span>
+        </label>
+        <label class="cat-option">
+          <input type="radio" name="cat" value="관광안내">
+          <span class="cat-option-label" onclick="setCatColor(this,'#1ABC9C')">🗺<br>관광안내</span>
+        </label>
+        <label class="cat-option">
+          <input type="radio" name="cat" value="지하철">
+          <span class="cat-option-label" onclick="setCatColor(this,'#9B59B6')">🚇<br>지하철</span>
+        </label>
+        <label class="cat-option">
+          <input type="radio" name="cat" value="버스">
+          <span class="cat-option-label" onclick="setCatColor(this,'#27AE60')">🚌<br>버스</span>
+        </label>
+        <label class="cat-option">
+          <input type="radio" name="cat" value="상품태그">
+          <span class="cat-option-label" onclick="setCatColor(this,'#F39C12')">🏷<br>상품태그</span>
+        </label>
+        <label class="cat-option">
+          <input type="radio" name="cat" value="기타">
+          <span class="cat-option-label" onclick="setCatColor(this,'#888')">📌<br>기타</span>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <span class="field-label">제목 / 위치</span>
+      <input class="form-input" id="item-title" type="text" placeholder="예) 명동 순대국밥 메뉴판, 2호선 강남역 노선도">
+    </div>
+
+    <div>
+      <span class="field-label">메모</span>
+      <textarea class="form-textarea" id="item-memo" placeholder="예) 영어 번역 없음, 한자 섞여있음, 손글씨체, 야간 촬영"></textarea>
+    </div>
+
+    <div>
+      <span class="field-label">사진 첨부 (복수 선택 가능)</span>
+      <div class="photo-upload-area" id="upload-area">
+        <input type="file" id="photo-input" accept="image/*" multiple onchange="handlePhotos(this)">
+        <div class="photo-upload-icon">📷</div>
+        <div class="photo-upload-text">탭하여 사진 선택 또는 카메라 촬영</div>
+      </div>
+      <div class="photo-preview-grid" id="preview-grid"></div>
+    </div>
+
+    <button class="btn-add-item" onclick="addItem()">✚ 수집 목록에 추가</button>
+  </div>
+</div>
+
+<!-- Collected items -->
+<div class="section-header">
+  <span class="section-header-title">📂 수집된 이미지</span>
+</div>
+
+<div class="items-grid" id="items-grid">
+  <div class="empty-state" id="empty-state">
+    <div class="icon">📭</div>
+    <p>아직 수집된 이미지가 없어요.<br>위에서 카테고리를 선택하고<br>사진을 추가해보세요!</p>
+  </div>
+</div>
+
+<!-- Bottom bar -->
+<div class="bottom-bar">
+  <button class="btn-export" onclick="exportJSON()">💾 목록 저장 (JSON)</button>
+  <button class="btn-export-imgs" onclick="exportAll()">📦 전체 내보내기</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const CAT_COLORS = {
+    '간판':   { bg: '#FF6B35', light: '#FFF0EB' },
+    '메뉴판': { bg: '#E91E8C', light: '#FCE4F3' },
+    '도로표지':{ bg: '#4A90E2', light: '#E8F1FB' },
+    '관광안내':{ bg: '#1ABC9C', light: '#E0FAF5' },
+    '지하철': { bg: '#9B59B6', light: '#F3EAF9' },
+    '버스':   { bg: '#27AE60', light: '#E5F6EC' },
+    '상품태그':{ bg: '#F39C12', light: '#FEF5E7' },
+    '기타':   { bg: '#888888', light: '#F0F0F0' },
+  };
+
+  let items = [];
+  let pendingPhotos = []; // {dataUrl, name}
+  let currentFilter = 'all';
+
+  // ── Category color apply ──
+  function setCatColor(el, color) {
+    document.querySelectorAll('.cat-option-label').forEach(l => {
+      l.style.background = '';
+      l.style.color = '';
+      l.style.borderColor = '';
+    });
+  }
+  // update checked styling
+  document.querySelectorAll('.cat-option input').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.cat-option-label').forEach(l => {
+        l.style.background = '';
+        l.style.color = '';
+        l.style.borderColor = '';
+      });
+      const checked = document.querySelector('.cat-option input:checked');
+      if (checked) {
+        const lbl = checked.nextElementSibling;
+        const cat = checked.value;
+        const c = CAT_COLORS[cat];
+        if (c) { lbl.style.background = c.bg; lbl.style.color = '#fff'; lbl.style.borderColor = c.bg; }
+      }
+    });
+  });
+  // init first
+  (() => {
+    const first = document.querySelector('.cat-option input:checked');
+    if (first) {
+      const lbl = first.nextElementSibling;
+      const c = CAT_COLORS[first.value];
+      if (c) { lbl.style.background = c.bg; lbl.style.color = '#fff'; lbl.style.borderColor = c.bg; }
+    }
+  })();
+
+  // ── Photo handling ──
+  function handlePhotos(input) {
+    const files = Array.from(input.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        pendingPhotos.push({ dataUrl: e.target.result, name: file.name });
+        renderPreviews();
+      };
+      reader.readAsDataURL(file);
+    });
+    input.value = '';
+  }
+
+  function renderPreviews() {
+    const grid = document.getElementById('preview-grid');
+    grid.innerHTML = '';
+    pendingPhotos.forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'photo-preview-item';
+      div.innerHTML = `<img src="${p.dataUrl}" alt="preview">
+        <button class="photo-remove-btn" onclick="removePhoto(${i})">×</button>`;
+      grid.appendChild(div);
+    });
+  }
+
+  function removePhoto(i) {
+    pendingPhotos.splice(i, 1);
+    renderPreviews();
+  }
+
+  // ── Add item ──
+  function addItem() {
+    const cat = document.querySelector('.cat-option input:checked')?.value || '기타';
+    const title = document.getElementById('item-title').value.trim();
+    const memo  = document.getElementById('item-memo').value.trim();
+
+    if (!title && pendingPhotos.length === 0) {
+      showToast('제목 또는 사진을 입력해주세요');
+      return;
+    }
+
+    const item = {
+      id: Date.now(),
+      cat,
+      title: title || '(제목 없음)',
+      memo,
+      photos: [...pendingPhotos],
+      ts: new Date().toLocaleString('ko-KR'),
+    };
+    items.unshift(item);
+
+    // reset
+    document.getElementById('item-title').value = '';
+    document.getElementById('item-memo').value = '';
+    pendingPhotos = [];
+    renderPreviews();
+
+    renderItems();
+    updateCount();
+    showToast(`${cat} 항목 추가 완료 ✓`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Render items ──
+  function renderItems() {
+    const grid = document.getElementById('items-grid');
+    const empty = document.getElementById('empty-state');
+    const filtered = currentFilter === 'all' ? items : items.filter(i => i.cat === currentFilter);
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '';
+      grid.appendChild(empty);
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    grid.innerHTML = '';
+
+    filtered.forEach(item => {
+      const c = CAT_COLORS[item.cat] || CAT_COLORS['기타'];
+      const photosHtml = item.photos.map(p =>
+        `<img class="item-photo-thumb" src="${p.dataUrl}" alt="${p.name}">`
+      ).join('');
+      const div = document.createElement('div');
+      div.className = 'item-card';
+      div.innerHTML = `
+        <div class="item-accent" style="background:${c.bg}"></div>
+        <div class="item-body">
+          <div class="item-top">
+            <div class="item-title">${escHtml(item.title)}</div>
+            <button class="item-delete" onclick="deleteItem(${item.id})">×</button>
+          </div>
+          <span class="item-cat-badge" style="background:${c.light};color:${c.bg}">${item.cat}</span>
+          ${item.memo ? `<div class="item-memo" style="margin-top:5px">${escHtml(item.memo)}</div>` : ''}
+          ${item.photos.length > 0 ? `<div class="item-photos">${photosHtml}</div>` : ''}
+          <div class="item-meta">${item.ts}</div>
+        </div>`;
+      grid.appendChild(div);
+    });
+  }
+
+  function deleteItem(id) {
+    items = items.filter(i => i.id !== id);
+    renderItems();
+    updateCount();
+    showToast('삭제되었습니다');
+  }
+
+  function updateCount() {
+    document.getElementById('total-count').textContent = items.length + '건';
+  }
+
+  // ── Filter ──
+  function filterCat(cat, btn) {
+    currentFilter = cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderItems();
+  }
+
+  // ── Export ──
+  function exportJSON() {
+    if (items.length === 0) { showToast('저장할 항목이 없어요'); return; }
+    const exportData = items.map(item => ({
+      id: item.id, cat: item.cat, title: item.title,
+      memo: item.memo, photoCount: item.photos.length, ts: item.ts
+    }));
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `papago_images_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`목록 저장 완료 (${items.length}건)`);
+  }
+
+  function exportAll() {
+    if (items.length === 0) { showToast('내보낼 항목이 없어요'); return; }
+    // Export each photo as individual download
+    let count = 0;
+    items.forEach(item => {
+      item.photos.forEach((p, pi) => {
+        setTimeout(() => {
+          const a = document.createElement('a');
+          a.href = p.dataUrl;
+          const safeCat = item.cat.replace(/[^a-zA-Z가-힣]/g, '');
+          a.download = `${safeCat}_${item.id}_${pi+1}.jpg`;
+          a.click();
+        }, count * 300);
+        count++;
+      });
+    });
+    exportJSON();
+    showToast(`사진 ${count}장 + JSON 내보내기 시작`);
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
